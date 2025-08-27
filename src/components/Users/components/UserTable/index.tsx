@@ -1,5 +1,5 @@
 import { Table } from "semantic-ui-react";
-import { LuMail, LuPhone, LuUser, LuMapPin, LuBuilding2, LuGlobe } from "react-icons/lu";
+import { LuMail, LuPhone, LuMapPin, LuBuilding2, LuGlobe } from "react-icons/lu";
 import { IUser } from "@/resources/Users/interface";
 import { useRouter } from "next/navigation";
 import logger from "@/utils/logger";

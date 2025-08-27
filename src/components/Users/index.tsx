@@ -1,6 +1,5 @@
 "use client";
 import { useGetUsers } from '@/hooks/useUsers';
-import logger from '@/utils/logger';
 import UserCard from './components/UserCard';
 import UserTable from './components/UserTable';
 import { useViewMode } from '@/hooks/useViewMode';

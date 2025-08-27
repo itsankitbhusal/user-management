@@ -1,6 +1,6 @@
 import { Message } from 'semantic-ui-react'
 
-const UsersError = ({ error }: { error: any }) => {
+const UsersError = ({ error }: { error: Error }) => {
   return (
     <Message negative>
       <Message.Header>Error fetching users</Message.Header>

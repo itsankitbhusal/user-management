@@ -4,13 +4,15 @@ import { useRouter } from 'next/navigation';
 import { LuUser, LuMail, LuPhone } from 'react-icons/lu';
 import { Card } from 'semantic-ui-react';
 
-interface IProps extends IUser { }
+interface IProps extends IUser {
+  showAt?: boolean;
+}
 
-const UserCard: React.FC<IProps> = ({ id, name, username, email, phone }) => {
+const UserCard: React.FC<IProps> = ({ id, name, username, email, phone, showAt }: IProps) => {
   const router = useRouter();
   const initials = name
     .split(' ')
-    .map((n) => n[0])
+    .map((n: string) => n[0])
     .join('')
     .toUpperCase();
 
@@ -26,7 +28,7 @@ const UserCard: React.FC<IProps> = ({ id, name, username, email, phone }) => {
         <Card.Header className="text-lg font-semibold text-gray-800">
           {name}
         </Card.Header>
-        <Card.Meta className="text-gray-400">@{username}</Card.Meta>
+        <Card.Meta className="text-gray-400">{showAt ? "@" : null}{username}</Card.Meta>
 
         <div className="space-y-3 text-gray-600 text-sm">
           <p className="flex items-center gap-2">
