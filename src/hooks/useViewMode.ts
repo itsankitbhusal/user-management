@@ -1,16 +1,20 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { isServer } from "../utils/misc";
 
 export const useViewMode = () => {
-    const getMode = () => {
-        if (isServer) return "card";
-        return localStorage.getItem("viewMode") || "card";
-    };
-    const [viewMode, setViewMode] = useState(getMode() ?? "card");
-    const setMode = (mode: "card" | "table") => {
-        if (isServer) return;
-        localStorage.setItem("viewMode", mode);
-        setViewMode(mode)
-    };
-    return { viewMode, setMode };
+  const [viewMode, setViewModeState] = useState<"card" | "table">("card");
+
+  useEffect(() => {
+    if (!isServer) {
+      const storedMode = (localStorage.getItem("viewMode") as "card" | "table") || "card";
+      setViewModeState(storedMode);
+    }
+  }, []);
+
+  const setMode = (mode: "card" | "table") => {
+    if (!isServer) localStorage.setItem("viewMode", mode);
+    setViewModeState(mode);
+  };
+
+  return { viewMode, setMode };
 };
