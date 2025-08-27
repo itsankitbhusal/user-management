@@ -1,7 +1,7 @@
 "use client"
-import React from 'react'
 import { useGetUsers } from '@/hooks/useUsers'
 import logger from '@/utils/logger';
+import UserCard from './components/UserCard';
 
 const Users = () => {
     const { data, isLoading, error } = useGetUsers();
@@ -11,7 +11,7 @@ const Users = () => {
     return (
         <>
             {data?.map((user) => (
-                <div key={user.id}>{user.id} {user.name}</div>
+                <UserCard key={user.id} id={user.id} name={user.name} username={user.username} email={user.email} address={user.address} phone={user.phone} website={user.website} company={user.company} />
             ))}
         </>
     )
