@@ -1,67 +1,52 @@
+import CustomButton from '@/components/CustomButton';
 import { IUser } from '@/resources/Users/interface';
-import { Card, Icon, Image, Button } from 'semantic-ui-react';
 import { useRouter } from 'next/navigation';
+import { LuUser, LuMail, LuPhone } from 'react-icons/lu';
+import { Card } from 'semantic-ui-react';
 
 interface IProps extends IUser { }
 
-const UserCard: React.FC<IProps> = ({
-    id,
-    name,
-    username,
-    email,
-    address,
-    phone,
-    website,
-    company,
-}) => {
-    const router = useRouter();
-    const fullAddress = `${address.street}, ${address.suite}, ${address.city}, ${address.zipcode}`;
-    const initials = name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase();
+const UserCard: React.FC<IProps> = ({ id, name, username, email, phone }) => {
+  const router = useRouter();
+  const initials = name
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .toUpperCase();
 
-    return (
-        <Card fluid>
-            <Card.Content>
-                <Image
-                    floated='right'
-                    size='mini'
-                    // src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                    //     name
-                    // )}&background=random`}
-                    circular
-                />
-                <Card.Header>{name}</Card.Header>
-                <Card.Meta>@{username}</Card.Meta>
-                <Card.Description>
-                    <p><Icon name='mail' /> {email}</p>
-                    <p><Icon name='phone' /> {phone}</p>
-                    <p><Icon name='globe' /> {website}</p>
-                    <p><Icon name='building' /> {company.name}</p>
-                    <p><Icon name='quote left' /> {company.catchPhrase}</p>
-                    <p><Icon name='map marker alternate' /> {fullAddress}</p>
-                </Card.Description>
-            </Card.Content>
-            <Card.Content extra>
-                <div className='ui two buttons'>
-                    <button
-                        className="ui basic button"
-                        onClick={() => router.push(`/users/${id}`)}
-                    >
-                        View
-                    </button>
-                    <button
-                        className="ui basic button"
-                        onClick={() => router.push(`/users/${id}`)}
-                    >
-                        Message
-                    </button>
-                </div>
-            </Card.Content>
-        </Card>
-    );
+  return (
+    <Card className="flex flex-col justify-between rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 bg-white">
+      <div className="flex justify-center pt-6">
+        <div className="bg-blue-500 text-white w-16 h-16 flex items-center justify-center rounded-full text-lg font-semibold">
+          {initials}
+        </div>
+      </div>
+
+      <Card.Content className="text-center px-6 pt-4 pb-2">
+        <Card.Header className="text-lg font-semibold text-gray-800">
+          {name}
+        </Card.Header>
+        <Card.Meta className="text-gray-400">@{username}</Card.Meta>
+
+        <div className="space-y-3 text-gray-600 text-sm">
+          <p className="flex items-center gap-2">
+            <LuMail className="text-gray-400" /> {email}
+          </p>
+          <p className="flex items-center gap-2">
+            <LuPhone className="text-gray-400" /> {phone}
+          </p>
+        </div>
+      </Card.Content>
+
+      <Card.Content extra className="flex justify-center">
+        <CustomButton
+          onClick={() => router.push(`/users/${id}`)}
+          label="View Profile"
+          icon={<LuUser />}
+        />
+      </Card.Content>
+    </Card>
+  );
 };
 
 export default UserCard;
