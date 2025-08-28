@@ -7,15 +7,33 @@ import UsersLoading from './components/UsersLoading';
 import UsersError from './components/UsersError';
 import { useState, useMemo, useEffect } from 'react';
 import { LuSearch } from 'react-icons/lu';
+import { Pagination, PaginationProps } from 'semantic-ui-react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const Users = () => {
-    const { data, isLoading, error } = useGetUsers();
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const initialPage = Number(searchParams.get("page")) || 1;
     const { viewMode, setMode } = useViewMode();
     const [searchQuery, setSearchQuery] = useState("");
+    const [page, setPage] = useState<number>(initialPage);
     const [debouncedQuery, setDebouncedQuery] = useState("");
+    const { data, isLoading, error } = useGetUsers({
+        pageParams: {
+            page: page,
+            limit: 5,
+            q: debouncedQuery
+        }
+    });
 
     useEffect(() => {
         const debouncedTimer = setTimeout(() => {
+            setPage(1);
+            // set url
+            const url = new URL(window.location.href);
+            url.searchParams.delete("page");
+            url.searchParams.set("q", searchQuery);
+            router.push(url.toString());
             setDebouncedQuery(searchQuery);
         }, 500);
 
@@ -26,15 +44,15 @@ const Users = () => {
         setMode(mode);
     };
 
-    const filteredUsers = useMemo(
-        () =>
-            data?.filter(
-                (user) =>
-                    user.name.toLowerCase().includes(debouncedQuery.toLowerCase()) ||
-                    user.email.toLowerCase().includes(debouncedQuery.toLowerCase())
-            ),
-        [data, debouncedQuery]
-    );
+    const handlePageChange = (_, data: PaginationProps) => {
+        if (data?.activePage) {
+            setPage(Number(data?.activePage))
+            // set url
+            const url = new URL(window.location.href);
+            url.searchParams.set("page", data?.activePage.toString());
+            router.push(url.toString());
+        }
+    }
 
     return (
         <div className="p-6 space-y-6">
@@ -83,8 +101,8 @@ const Users = () => {
                     <>
                         {viewMode === "card" ? (
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                                {filteredUsers?.length ? (
-                                    filteredUsers.map((user) => (
+                                {data?.length ? (
+                                    data.map((user) => (
                                         <UserCard
                                             key={user.id}
                                             id={user.id}
@@ -105,8 +123,8 @@ const Users = () => {
                             </div>
                         ) : (
                             <div className="overflow-x-auto">
-                                <UserTable users={filteredUsers ?? []} />
-                                {!filteredUsers?.length && (
+                                <UserTable users={data ?? []} />
+                                {!data?.length && (
                                     <p className="text-gray-500 text-center mt-4">
                                         No users found.
                                     </p>
@@ -115,6 +133,20 @@ const Users = () => {
                         )}
                     </>
                 )}
+                <div className="mt-16 w-full flex justify-center">
+                    <Pagination
+                        boundaryRange={0}
+                        defaultActivePage={initialPage}
+                        activePage={page}
+                        ellipsisItem={null}
+                        firstItem={null}
+                        lastItem={null}
+                        siblingRange={1}
+                        totalPages={2}
+                        onPageChange={handlePageChange}
+
+                    />
+                </div>
             </div>
         </div>
     );

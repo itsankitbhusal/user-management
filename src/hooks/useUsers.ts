@@ -1,13 +1,18 @@
 import { API } from "@/resources";
 import { useQuery } from "@tanstack/react-query";
+import { IPageParams } from "@/resources/Users/interface";
 
-export const userKeys = {
-    GET_ALL_USERS: "get_all_users"
+interface IProps {
+  pageParams: IPageParams;
 }
 
-export const useGetUsers = () => {
-    return useQuery({
-        queryKey: [userKeys.GET_ALL_USERS],
-        queryFn: () => API.Users.getUsers(),
-    })
+export const userKeys = {
+  GET_ALL_USERS: "get_all_users",
+};
+
+export const useGetUsers = ({ pageParams }: IProps) => {
+  return useQuery({
+    queryKey: [userKeys.GET_ALL_USERS, pageParams],
+    queryFn: () => API.Users.getUsers(pageParams),
+  });
 };

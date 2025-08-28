@@ -27,3 +27,9 @@ export interface IUser {
   website: string;
   company: ICompany;
 }
+
+export interface IPageParams {
+    page?: number;
+    limit?: number;
+    q?: string;
+}
