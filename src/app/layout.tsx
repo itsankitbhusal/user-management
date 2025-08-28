@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import AppQueryProvider from "@/providers/QueryProvider";
 import "./globals.css";
-import Head from "next/head";
+import "semantic-ui-css/semantic.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,12 +26,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/semantic-ui@2/dist/semantic.min.css"
-        />
-      </Head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AppQueryProvider>{children}</AppQueryProvider>
       </body>
