@@ -17,7 +17,7 @@ const UserCard: React.FC<IProps> = ({ id, name, username, email, phone, showAt }
     .toUpperCase();
 
   return (
-    <Card className="flex flex-col justify-between rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 bg-white">
+    <Card className="flex flex-col m-0! justify-between rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 bg-white">
       <div className="flex justify-center pt-6">
         <div className="bg-blue-500 text-white w-16 h-16 flex items-center justify-center rounded-full text-lg font-semibold">
           {initials}
