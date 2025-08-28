@@ -6,8 +6,8 @@ interface IProps {
         id: string;
     };
 }
-const page = ({ params }: IProps) => {
-    const { id } = params;
+const page = async ({ params }: IProps) => {
+    const { id } = await params;
     return (
         <UserDetail id={Number(id)} />
     )
