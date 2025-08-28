@@ -1,10 +1,16 @@
 import React from 'react'
 import UserDetail from '@/components/UserDetail'
 
-const page = () => {
-  return (
-      <UserDetail />
-  )
+interface IProps {
+    params: {
+        id: string;
+    };
+}
+const page = ({ params }: IProps) => {
+    const { id } = params;
+    return (
+        <UserDetail id={Number(id)} />
+    )
 }
 
 export default page

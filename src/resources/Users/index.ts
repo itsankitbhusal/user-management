@@ -12,7 +12,7 @@ export const getUsers = (pageParams: IPageParams): Promise<IUser[]> => {
     return fetch(url);
 }
 
-export const getUser = (id: string): Promise<IUser> => {
-    const url = `${apiUrls.Users.GET_USER}/${id}`;
+export const getUser = (id: number): Promise<IUser> => {
+    const url = `${apiUrls.Users.GET_USER}${id}`;
     return fetch(url);
 }

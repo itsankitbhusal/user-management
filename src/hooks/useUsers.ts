@@ -18,7 +18,7 @@ export const useGetUsers = ({ pageParams }: IProps) => {
   });
 };
 
-export const useGetUser = ({ id }: { id: string }) => {
+export const useGetUser = ({ id }: { id: number }) => {
   return useQuery({
     queryKey: [userKeys.GET_USER, id],
     queryFn: () => API.Users.getUser(id),
