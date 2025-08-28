@@ -1,5 +1,6 @@
 import CustomButton from '@/components/CustomButton';
 import { IUser } from '@/resources/Users/interface';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { LuUser, LuMail, LuPhone } from 'react-icons/lu';
 import { Card } from 'semantic-ui-react';
@@ -9,7 +10,6 @@ interface IProps extends IUser {
 }
 
 const UserCard: React.FC<IProps> = ({ id, name, username, email, phone, showAt }: IProps) => {
-  const router = useRouter();
   const initials = name
     .split(' ')
     .map((n: string) => n[0])
@@ -41,11 +41,12 @@ const UserCard: React.FC<IProps> = ({ id, name, username, email, phone, showAt }
       </Card.Content>
 
       <Card.Content extra className="flex justify-center">
+        <Link href={`/user/${id}`}>
         <CustomButton
-          onClick={() => router.push(`/user/${id}`)}
           label="View Profile"
           icon={<LuUser />}
-        />
+          />
+          </Link>
       </Card.Content>
     </Card>
   );

@@ -2,7 +2,7 @@ import React, { ButtonHTMLAttributes } from 'react'
 
 interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     label: string;
-    onClick: () => void;
+    onClick?: () => void;
     className?: string;
     icon?: React.ReactNode;
 }
