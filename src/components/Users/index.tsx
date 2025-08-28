@@ -5,17 +5,21 @@ import UserTable from "./components/UserTable";
 import { useViewMode } from "@/hooks/useViewMode";
 import UsersLoading from "./components/UsersLoading";
 import UsersError from "./components/UsersError";
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { LuSearch } from "react-icons/lu";
 import { Pagination, PaginationProps } from "semantic-ui-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
-const Users = () => {
+interface IProps {
+  currentPage?: number;
+  search?: string;
+}
+
+const Users = ({ currentPage, search }: IProps) => {
   const router = useRouter();
-  const searchParams = useSearchParams();
 
-  const initialPage = Number(searchParams.get("page")) || 1;
-  const initialQuery = searchParams.get("q") || "";
+  const initialPage = currentPage || 1;
+  const initialQuery = search || "";
 
   const { viewMode, setMode } = useViewMode();
   const [searchQuery, setSearchQuery] = useState(initialQuery);
@@ -30,25 +34,27 @@ const Users = () => {
     },
   });
 
-  const updateURL = (newQuery: string, newPage: number) => {
-    const url = new URL(window.location.href);
+  const updateURL = useCallback(
+    (newQuery: string, newPage: number) => {
+      const searchParams = new URLSearchParams();
 
-    if (newQuery) {
-      url.searchParams.set("q", newQuery);
-    } else {
-      url.searchParams.delete("q");
-    }
+      if (newQuery) {
+        searchParams.set("q", newQuery);
+      }
 
-    if (newPage > 1) {
-      url.searchParams.set("page", newPage.toString());
-    } else {
-      url.searchParams.delete("page");
-    }
+      if (newPage > 1) {
+        searchParams.set("page", newPage.toString());
+      }
 
-    if (url.toString() !== window.location.href) {
-      router.push(url.toString());
-    }
-  };
+      const queryString = searchParams.toString();
+      const newPath = queryString
+        ? `?${queryString}`
+        : window.location.pathname;
+
+      router.push(newPath);
+    },
+    [router]
+  );
 
   useEffect(() => {
     const debouncedTimer = setTimeout(() => {
@@ -57,48 +63,44 @@ const Users = () => {
       if (searchQuery !== initialQuery) {
         setPage(1);
         updateURL(searchQuery, 1);
-      } else if (searchQuery === "" && initialQuery !== "") {
-        setPage(1);
-        updateURL("", 1);
       } else {
         updateURL(searchQuery, page);
       }
     }, 500);
 
     return () => clearTimeout(debouncedTimer);
-  }, [searchQuery, page, initialQuery, updateURL]);
+  }, [searchQuery, initialQuery, updateURL, page]);
 
   useEffect(() => {
-    const urlPage = Number(searchParams.get("page")) || 1;
-    const urlQuery = searchParams.get("q") || "";
+    const urlPage = Number(currentPage) || 1;
+    const urlQuery = search || "";
 
-    if (urlPage !== page) {
-      setPage(urlPage);
-    }
-
-    if (urlQuery !== searchQuery) {
-      setSearchQuery(urlQuery);
-      setDebouncedQuery(urlQuery);
-    }
-  }, [searchParams]);
+    setPage(urlPage);
+    setSearchQuery(urlQuery);
+    setDebouncedQuery(urlQuery);
+  }, [currentPage, search]);
 
   const handleViewModeChange = (mode: "card" | "table") => {
     setMode(mode);
   };
 
-  const handlePageChange =  
-    (_: any, data: PaginationProps) => {
+  const handlePageChange = useCallback(
+    (_: unknown, data: PaginationProps) => {
       if (data?.activePage) {
         const newPage = Number(data.activePage);
         setPage(newPage);
         updateURL(debouncedQuery, newPage);
       }
-    }
+    },
+    [debouncedQuery, updateURL]
+  );
 
-  const handleSearchChange = 
+  const handleSearchChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
       setSearchQuery(e.target.value);
-    }
+    },
+    []
+  );
 
   const totalPages = 2;
 
