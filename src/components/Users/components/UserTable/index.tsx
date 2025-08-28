@@ -13,7 +13,7 @@ const UserTable: React.FC<IProps> = ({ users }: IProps) => {
   const router = useRouter();
   const handleRowClick = (userId: number) => {
     logger.log(userId);
-    router.push(`/users/${userId}`);
+    router.push(`/user/${userId}`);
   };
 
   return (

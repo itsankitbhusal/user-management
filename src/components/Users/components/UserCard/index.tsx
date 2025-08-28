@@ -42,7 +42,7 @@ const UserCard: React.FC<IProps> = ({ id, name, username, email, phone, showAt }
 
       <Card.Content extra className="flex justify-center">
         <CustomButton
-          onClick={() => router.push(`/users/${id}`)}
+          onClick={() => router.push(`/user/${id}`)}
           label="View Profile"
           icon={<LuUser />}
         />

@@ -26,8 +26,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable}  `}>
+        <div className="w-full h-full max-w-[1400px] mx-auto">
         <AppQueryProvider>{children}</AppQueryProvider>
+        </div>
       </body>
     </html>
   );

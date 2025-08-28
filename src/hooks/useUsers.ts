@@ -8,6 +8,7 @@ interface IProps {
 
 export const userKeys = {
   GET_ALL_USERS: "get_all_users",
+  GET_USER: "get_user",
 };
 
 export const useGetUsers = ({ pageParams }: IProps) => {
@@ -16,3 +17,11 @@ export const useGetUsers = ({ pageParams }: IProps) => {
     queryFn: () => API.Users.getUsers(pageParams),
   });
 };
+
+export const useGetUser = ({ id }: { id: string }) => {
+  return useQuery({
+    queryKey: [userKeys.GET_USER, id],
+    queryFn: () => API.Users.getUser(id),
+  });
+};
+  
