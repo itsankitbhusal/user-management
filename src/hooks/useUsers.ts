@@ -2,7 +2,7 @@ import { API } from "@/resources";
 import { useQuery } from "@tanstack/react-query";
 import { IPageParams } from "@/resources/Users/interface";
 
-interface IProps {
+interface IGetUsersProps {
   pageParams: IPageParams;
 }
 
@@ -11,7 +11,7 @@ export const userKeys = {
   GET_USER: "get_user",
 };
 
-export const useGetUsers = ({ pageParams }: IProps) => {
+export const useGetUsers = ({ pageParams }: IGetUsersProps) => {
   return useQuery({
     queryKey: [userKeys.GET_ALL_USERS, pageParams],
     queryFn: () => API.Users.getUsers(pageParams),
@@ -22,6 +22,7 @@ export const useGetUser = ({ id }: { id: number }) => {
   return useQuery({
     queryKey: [userKeys.GET_USER, id],
     queryFn: () => API.Users.getUser(id),
+    enabled: !!id,
   });
 };
   
